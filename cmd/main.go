@@ -135,6 +135,10 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, s)
 }
 
+func homePage(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintf(w, homeHTML)
+}
+
 func main() {
     uploadPath = UPLOAD_PATH_KOBO
     if runtime.GOOS == "windows" {
@@ -154,8 +158,9 @@ func main() {
     webPath := path.Join(exePath, "web")
     fs := http.FileServer(http.Dir(webPath))
 
-    http.Handle("/", fs)
+    http.Handle("/web/", http.StripPrefix("/web/", fs))
     http.HandleFunc("/upload", uploadFile)
+    http.HandleFunc("/", homePage)
 
     fmt.Printf("Listening on: 80, web path: (%s), uploading path: %s\n", webPath, uploadPath)
 

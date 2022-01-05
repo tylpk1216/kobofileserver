@@ -1,6 +1,10 @@
+package main
+
+var homeHTML string = `
+<!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./web/style.css">
   <title>Kobo WiFi Transfer</title>
 </head>
 <body>
@@ -15,6 +19,7 @@
   <div id="upload-result" class="upload-result"></div>
 </form>
 </body>
-<script src="jquery.min.js"></script>
-<script src="upload.js"></script>
+<script src="./web/jquery.min.js"></script>
+<script src="./web/upload.js"></script>
 </html>
+`
