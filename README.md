@@ -26,5 +26,8 @@ menu_item :main    :KoboFileServer (toggle)  :cmd_output         :500:quiet  :/u
 06. Select a file.
 07. Click "Click to upload file" to upload file.
 
+# Test Video
+[Use Android E-Ink device(HyRead Gaze Pocket) to upload files to Kobo Elipsa.)](https://youtu.be/mZ4C3v0sqL0 "kobofileserver").
+
 # License
 MIT
