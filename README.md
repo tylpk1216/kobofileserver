@@ -4,7 +4,8 @@ Run it on Kobo device, then use browser to transfer file to device.
 # Installation
 01. Install NickelMenu, I use it to launch application.
 02. Put KoboFileServer folder in /mnt/onboard/.adds
-03. Modify NickelMenu config file.
+03. Create /mnt/onboard/kobofileserver folder.
+04. Modify NickelMenu config file.
 ```
 menu_item :main    :Force Wi-Fi On (toggle)  :nickel_setting     :toggle:force_wifi
 menu_item :main    :IP Address               :cmd_output         :500:/sbin/ifconfig | /usr/bin/awk '/inet addr/{print substr($2,6)}'
@@ -15,7 +16,7 @@ menu_item :main    :KoboFileServer (toggle)  :cmd_output         :500:quiet  :/u
   chain_always:skip:-1
   chain_success                              :dbg_toast          :Stopped KoboFileServer
 ```
-04. Adjust your sleep settings of device for transfering large file. The processing speed is 0.52MB/second on Kobo Elipsa when I use HyRead Gaze Pocket to uploading file. If you use cell phone, I think the speed is better.
+05. Adjust your sleep settings of device for transfering large file. The processing speed is 0.52MB/second on Kobo Elipsa when I use HyRead Gaze Pocket to uploading file. If you use cell phone, I think the speed is better.
 
 # How to use it
 01. Click "Force Wi-Fi On (toggle)" of NickelMenu.
