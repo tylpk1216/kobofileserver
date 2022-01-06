@@ -4,7 +4,7 @@ Run it on Kobo device, then use browser to transfer file to device.
 # Installation
 01. Install NickelMenu, I use it to launch application.
 02. Put KoboFileServer folder in /mnt/onboard/.adds
-03. Create /mnt/onboard/kobofileserver folder.
+03. Create "/mnt/onboard/kobofileserver" folder.
 04. Modify NickelMenu config file.
 ```
 menu_item :main    :Force Wi-Fi On (toggle)  :nickel_setting     :toggle:force_wifi
