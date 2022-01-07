@@ -20,7 +20,7 @@ const UPLOAD_PATH_WINDOWS = "D:\\"
 const UPLOAD_PATH_KOBO = "/mnt/onboard/kobofileserver"
 
 var uploadPath string
-var refreshcript string
+var refreshScript string
 
 func responseString(msg string) string {
     return fmt.Sprintf("%s", msg)
@@ -67,7 +67,7 @@ func convertEPUB(converted bool, fileName string) (string, error) {
 
 func notifyKoboRefresh() error {
     if runtime.GOOS != "windows" {
-        cmd := exec.Command("/bin/sh", refreshcript)
+        cmd := exec.Command("/bin/sh", refreshScript)
         err := cmd.Run()
         if err != nil {
             return err
@@ -153,7 +153,7 @@ func main() {
 
     exePath = filepath.Dir(exePath)
 
-    refreshcript = path.Join(exePath, "refresh.sh")
+    refreshScript = path.Join(exePath, "refresh.sh")
 
     webPath := path.Join(exePath, "web")
     fs := http.FileServer(http.Dir(webPath))
