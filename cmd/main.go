@@ -12,6 +12,7 @@ import (
     "path/filepath"
     "runtime"
     "strings"
+    "time"
 
     "github.com/pgaskin/kepubify/v4/kepub"
 )
@@ -21,6 +22,11 @@ const UPLOAD_PATH_KOBO = "/mnt/onboard/kobofileserver"
 
 var uploadPath string
 var refreshScript string
+
+type RequestData struct {
+    converted bool
+    fileName string
+}
 
 func responseString(msg string) string {
     return fmt.Sprintf("%s", msg)
@@ -76,18 +82,16 @@ func notifyKoboRefresh() error {
     return nil
 }
 
-func uploadFile(w http.ResponseWriter, r *http.Request) {
+func saveFile(r *http.Request) (RequestData, error) {
+    var data RequestData
+
     if r.Method != "POST" {
-        s := responseString("Error: please use HTTP POST method to upload file")
-        fmt.Fprintf(w, s)
-        return
+        return data, fmt.Errorf("please use HTTP POST method to upload file")
     }
 
     err := r.ParseMultipartForm(32 << 20)
     if err != nil {
-        s := responseString(fmt.Sprintf("Error: (%v)", err))
-        fmt.Fprintf(w, s)
-        return
+        return data, err
     }
 
     convertedStr := r.FormValue("upload-converted")
@@ -98,9 +102,7 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 
     file, handler, err := r.FormFile("upload-file")
     if err != nil {
-        s := responseString(fmt.Sprintf("Error: (%v)", err))
-        fmt.Fprintf(w, s)
-        return
+        return data, err
     }
     defer file.Close()
 
@@ -109,20 +111,38 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
     fileName := path.Join(uploadPath, handler.Filename)
     f, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE, 0666)
     if err != nil {
-        s := responseString(fmt.Sprintf("Error: (%v)", err))
-        fmt.Fprintf(w, s)
-        return
+        return data, err
     }
 
     io.Copy(f, file)
     f.Close()
 
-    finalFile, err := convertEPUB(converted, fileName)
+    data.converted = converted
+    data.fileName = fileName
+
+    return data, nil
+}
+
+func uploadFile(w http.ResponseWriter, r *http.Request) {
+    t1 := time.Now()
+
+    requestData, err := saveFile(r)
     if err != nil {
         s := responseString(fmt.Sprintf("Error: (%v)", err))
         fmt.Fprintf(w, s)
         return
     }
+
+    t2 := time.Now()
+
+    finalFile, err := convertEPUB(requestData.converted, requestData.fileName)
+    if err != nil {
+        s := responseString(fmt.Sprintf("Error: (%v)", err))
+        fmt.Fprintf(w, s)
+        return
+    }
+
+    t3 := time.Now()
 
     err = notifyKoboRefresh()
     if err != nil {
@@ -131,7 +151,14 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    s := responseString(fmt.Sprintf("Uploading (%s) is successful.", finalFile))
+    s := responseString(
+        fmt.Sprintf(
+            "Uploading (%s) is successful, saveFile(%v), convertFile(%v)",
+            finalFile,
+            t2.Sub(t1),
+            t3.Sub(t2),
+        ),
+    )
     fmt.Fprintf(w, s)
 }
 
