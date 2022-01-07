@@ -144,13 +144,6 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 
     t3 := time.Now()
 
-    err = notifyKoboRefresh()
-    if err != nil {
-        s := responseString(fmt.Sprintf("Error: (%v)", err))
-        fmt.Fprintf(w, s)
-        return
-    }
-
     s := responseString(
         fmt.Sprintf(
             "Uploading (%s) is successful, saveFile(%v), convertFile(%v)",

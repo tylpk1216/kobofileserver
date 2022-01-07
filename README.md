@@ -9,6 +9,7 @@ Run it on Kobo device, then use browser to transfer file to device.
 ```
 menu_item :main    :Force Wi-Fi On (toggle)  :nickel_setting     :toggle:force_wifi
 menu_item :main    :IP Address               :cmd_output         :500:/sbin/ifconfig | /usr/bin/awk '/inet addr/{print substr($2,6)}'
+menu_item :main    :Import Books             :nickel_misc        :rescan_books_full
 menu_item :main    :KoboFileServer (toggle)  :cmd_output         :500:quiet  :/usr/bin/pkill -f "^/mnt/onboard/.adds/KoboFileServer/kobofileserver"
   chain_success:skip:3
   chain_failure                              :cmd_spawn          :/mnt/onboard/.adds/KoboFileServer/kobofileserver
@@ -26,6 +27,7 @@ menu_item :main    :KoboFileServer (toggle)  :cmd_output         :500:quiet  :/u
 05. Open browser on any device, then type "http://IP/".
 06. Select a file.
 07. Click "Click to upload file" to upload file.
+08. After uploading file is done, click "Import Books" of NickelMenu.
 
 # Test Video
 [Use Android E-Ink device(HyRead Gaze Pocket) to upload files to Kobo Elipsa.](https://youtu.be/mZ4C3v0sqL0 "kobofileserver")
