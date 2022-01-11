@@ -23,8 +23,8 @@ int main()
         exit(1);
     }
 
-    PlugWorkflowManager *pWF = PlugWorkflowManager_sharedInstance();
-    if (!pWF) {
+    PlugWorkflowManager *pWM = PlugWorkflowManager_sharedInstance();
+    if (!pWM) {
         fprintf(stderr, "get PlugWorkflowManager pointer error\n");
         exit(1);
     }
@@ -32,12 +32,13 @@ int main()
     //libnickel 4.13.12638 * _ZN19PlugWorkflowManager4syncEv
     void (*PlugWorkflowManager_sync)(PlugWorkflowManager*);
     PlugWorkflowManager_sync = (void (*)(PlugWorkflowManager*))dlsym(fHandle, " _ZN19PlugWorkflowManager4syncEv");
+
     if (!PlugWorkflowManager_sync) {
         fprintf(stderr, "%s\n", dlerror());
         exit(1);
     }
 
-    PlugWorkflowManager_sync(pWF);
+    PlugWorkflowManager_sync(pWM);
 
     dlclose(fHandle);
     return 0;
