@@ -8,7 +8,7 @@ int main()
 {
     void *fHandle;
 
-    fHandle = dlopen("/user/local/Kobo/libnickel.so.1.0.0", RTLD_LAZY);
+    fHandle = dlopen("/usr/local/Kobo/libnickel.so.1.0.0", RTLD_LAZY);
     if (!fHandle) {
         fprintf(stderr, "%s\n", dlerror());
         exit(1);
