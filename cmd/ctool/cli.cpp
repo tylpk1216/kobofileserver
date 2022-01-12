@@ -69,7 +69,7 @@ void Cli::start() {
     }
 
     if (timeoutSec > 0) {
-        QTimer::singleShot(timeoutSec, this, SLOT(handleTimeout()));
+        QTimer::singleShot(timeoutSec * 1000, this, SLOT(handleTimeout()));
     } else {
         QCoreApplication::quit();
     }
