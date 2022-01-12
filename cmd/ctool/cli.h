@@ -5,11 +5,14 @@
 
 class Cli : public QObject {
     public:
-        Cli(QObject* parent);
+        Cli(QObject* parent, int sec);
         int immportBooks();
 
     public Q_SLOTS:
         void start();
+        void handleTimeout();
+    private:
+        int timeoutSec;
 };
 
 #endif /*CLI_H*/

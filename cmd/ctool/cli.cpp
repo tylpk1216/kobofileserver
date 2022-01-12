@@ -1,5 +1,6 @@
 #include <QCoreApplication>
 #include <QTextStream>
+#include <QTimer>
 
 #include <dlfcn.h>
 
@@ -52,8 +53,12 @@ int Cli::immportBooks(void)
     return 0;
 }
 
-Cli::Cli(QObject* parent) : QObject(parent) {
+Cli::Cli(QObject* parent, int sec) : QObject(parent) {
+    timeoutSec = sec;
+}
 
+void Cli::handleTimeout() {
+    QCoreApplication::exit(99);
 }
 
 void Cli::start() {
@@ -62,5 +67,9 @@ void Cli::start() {
         QCoreApplication::exit(res);
     }
 
-    QCoreApplication::quit();
+    if (timeoutSec > 0) {
+        QTimer::singleShot(timeoutSec, this, SLOT(handleTimeout()));
+    } else {
+        QCoreApplication::quit();
+    }
 }
