@@ -43,6 +43,7 @@ int Cli::immportBooks(void)
 
     if (!PlugWorkflowManager_sync) {
         methodOut << dlerror() << endl;
+        methodOut << "here" << endl;
         dlclose(fHandle);
         return 4;
     }
