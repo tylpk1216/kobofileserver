@@ -3,6 +3,7 @@
 #include <QTimer>
 
 #include <dlfcn.h>
+#include <unistd.h>
 
 #include "cli.h"
 
@@ -37,6 +38,7 @@ int Cli::immportBooks(void)
         return 3;
     }
 
+    /*
     //libnickel 4.13.12638 * _ZN19PlugWorkflowManager4syncEv
     void (*PlugWorkflowManager_sync)(PlugWorkflowManager*);
     PlugWorkflowManager_sync = (void (*)(PlugWorkflowManager*))dlsym(fHandle, "_ZN19PlugWorkflowManager4syncEv");
@@ -48,6 +50,31 @@ int Cli::immportBooks(void)
     }
 
     PlugWorkflowManager_sync(pWM);
+    */
+
+    //libnickel 4.13.12638 * _ZN19PlugWorkflowManager18onCancelAndConnectEv
+    void (*PlugWorkflowManager_onCancelAndConnect)(PlugWorkflowManager*);
+    PlugWorkflowManager_onCancelAndConnect = (void(*)(PlugWorkflowManager*))dlsym(fHandle, "_ZN19PlugWorkflowManager18onCancelAndConnectEv");
+
+    if (!PlugWorkflowManager_onCancelAndConnect) {
+        methodOut << dlerror() << endl;
+        dlclose(fHandle);
+        return 5;
+    }
+
+    //libnickel 4.13.12638 * _ZN19PlugWorkflowManager9unpluggedEv
+    void (*PlugWorkflowManager_unplugged)(PlugWorkflowManager*);
+    PlugWorkflowManager_unplugged = (void(*)(PlugWorkflowManager*))dlsym(fHandle, "_ZN19PlugWorkflowManager9unpluggedEv");
+
+    if (!PlugWorkflowManager_unplugged) {
+        methodOut << dlerror() << endl;
+        dlclose(fHandle);
+        return 6;
+    }
+
+    PlugWorkflowManager_onCancelAndConnect(pWM);
+    sleep(1);
+    PlugWorkflowManager_unplugged(pWM);
 
     dlclose(fHandle);
     return 0;
