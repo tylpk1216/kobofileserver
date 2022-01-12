@@ -1,4 +1,4 @@
-#include <QApplication>
+#include <QCoreApplication>
 #include <QTimer>
 
 #include <cstdlib>
@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    QCoreApplication app(argc, argv);
 
     int timeoutSec = 0;
     if (argc == 2) {

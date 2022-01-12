@@ -1,4 +1,4 @@
-#include <QApplication>
+#include <QCoreApplication>
 #include <QTextStream>
 #include <QTimer>
 
@@ -43,7 +43,6 @@ int Cli::immportBooks(void)
 
     if (!PlugWorkflowManager_sync) {
         methodOut << dlerror() << endl;
-        methodOut << "here" << endl;
         dlclose(fHandle);
         return 4;
     }
@@ -59,18 +58,18 @@ Cli::Cli(QObject* parent, int sec) : QObject(parent) {
 }
 
 void Cli::handleTimeout() {
-    QApplication::exit(99);
+    QCoreApplication::exit(99);
 }
 
 void Cli::start() {
     int res = immportBooks();
     if (res != 0) {
-        QApplication::exit(res);
+        QCoreApplication::exit(res);
     }
 
     if (timeoutSec > 0) {
         QTimer::singleShot(timeoutSec * 1000, this, SLOT(handleTimeout()));
     } else {
-        QApplication::quit();
+        QCoreApplication::quit();
     }
 }
