@@ -39,7 +39,7 @@ int Cli::immportBooks(void)
 
     //libnickel 4.13.12638 * _ZN19PlugWorkflowManager4syncEv
     void (*PlugWorkflowManager_sync)(PlugWorkflowManager*);
-    PlugWorkflowManager_sync = (void (*)(PlugWorkflowManager*))dlsym(fHandle, " _ZN19PlugWorkflowManager4syncEv");
+    PlugWorkflowManager_sync = (void (*)(PlugWorkflowManager*))dlsym(fHandle, "_ZN19PlugWorkflowManager4syncEv");
 
     if (!PlugWorkflowManager_sync) {
         methodOut << dlerror() << endl;
