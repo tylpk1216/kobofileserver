@@ -1,4 +1,4 @@
-#include <QCoreApplication>
+#include <QApplication>
 #include <QTextStream>
 #include <QTimer>
 
@@ -59,18 +59,18 @@ Cli::Cli(QObject* parent, int sec) : QObject(parent) {
 }
 
 void Cli::handleTimeout() {
-    QCoreApplication::exit(99);
+    QApplication::exit(99);
 }
 
 void Cli::start() {
     int res = immportBooks();
     if (res != 0) {
-        QCoreApplication::exit(res);
+        QApplication::exit(res);
     }
 
     if (timeoutSec > 0) {
         QTimer::singleShot(timeoutSec * 1000, this, SLOT(handleTimeout()));
     } else {
-        QCoreApplication::quit();
+        QApplication::quit();
     }
 }
