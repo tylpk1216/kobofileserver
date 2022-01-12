@@ -1,7 +1,6 @@
 #include <QCoreApplication>
+#include <QTextStream>
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <dlfcn.h>
 
 #include "cli.h"
@@ -10,11 +9,13 @@ typedef void PlugWorkflowManager;
 
 int Cli::immportBooks(void)
 {
+    QTextStream methodOut(stdout);
+
     void *fHandle;
 
     fHandle = dlopen("/usr/local/Kobo/libnickel.so.1.0.0", RTLD_LAZY);
     if (!fHandle) {
-        fprintf(stderr, "%s\n", dlerror());
+        methodOut << dlerror() << endl;
         return 1;
     }
 
@@ -23,14 +24,14 @@ int Cli::immportBooks(void)
     PlugWorkflowManager_sharedInstance = (PlugWorkflowManager *(*)())dlsym(fHandle, "_ZN19PlugWorkflowManager14sharedInstanceEv");
 
     if (!PlugWorkflowManager_sharedInstance) {
-        fprintf(stderr, "%s\n", dlerror());
+        methodOut << dlerror() << endl;
         dlclose(fHandle);
         return 2;
     }
 
     PlugWorkflowManager *pWM = PlugWorkflowManager_sharedInstance();
     if (!pWM) {
-        fprintf(stderr, "get PlugWorkflowManager pointer error\n");
+        methodOut << "get PlugWorkflowManager pointer error\n" << endl;
         dlclose(fHandle);
         return 3;
     }
@@ -40,7 +41,7 @@ int Cli::immportBooks(void)
     PlugWorkflowManager_sync = (void (*)(PlugWorkflowManager*))dlsym(fHandle, " _ZN19PlugWorkflowManager4syncEv");
 
     if (!PlugWorkflowManager_sync) {
-        fprintf(stderr, "%s\n", dlerror());
+        methodOut << dlerror() << endl;
         dlclose(fHandle);
         return 4;
     }
@@ -56,5 +57,10 @@ Cli::Cli(QObject* parent) : QObject(parent) {
 }
 
 void Cli::start() {
-    immportBooks();
+    int res = immportBooks();
+    if (res != 0) {
+        QCoreApplication::exit(res);
+    }
+
+    QCoreApplication::quit();
 }
