@@ -4,6 +4,8 @@
 #include <QObject>
 
 class Cli : public QObject {
+    Q_OBJECT
+
     public:
         Cli(QObject* parent, int sec);
         int immportBooks();
