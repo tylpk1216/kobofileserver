@@ -144,6 +144,17 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 
     t3 := time.Now()
 
+    /*
+    // only for Elipsa now.
+    // click connect button automatically.
+    err = importBooks()
+    if err != nil {
+        s := responseString(fmt.Sprintf("Error: (%v), please use \"Import Books\" of NickelMenu", err))
+        fmt.Fprintf(w, s)
+        return
+    }
+    */
+
     s := responseString(
         fmt.Sprintf(
             "Uploading (%s) is successful, saveFile(%v), convertFile(%v)",
