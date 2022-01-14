@@ -71,6 +71,9 @@ func convertEPUB(converted bool, fileName string) (string, error) {
     return newFileName, nil
 }
 
+// You must add ExcludeSyncFolders settings to prevent from appearing books twice.
+// /mmt/sd/kobofileserver and /mnt/onboard/kobofileserver
+// ExcludeSyncFolders=(\\.(?!kobo|adobe).+|([^.][^/]*/)+\\..+|kobofileserver)
 func notifyKoboRefresh() error {
     if runtime.GOOS != "windows" {
         cmd := exec.Command("/bin/sh", refreshScript)
