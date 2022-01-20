@@ -5,6 +5,7 @@ import (
     "context"
     "fmt"
     "io"
+    "io/fs"
     "net/http"
     "os"
     "os/exec"
@@ -26,6 +27,11 @@ var refreshScript string
 type RequestData struct {
     converted bool
     fileName string
+}
+
+type EnvSettings struct {
+    uploadPath string
+    downloadPath string
 }
 
 func responseString(msg string) string {
@@ -173,6 +179,30 @@ func homePage(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, homeHTML)
 }
 
+func checkAndMkdir(path string) (error) {
+    _, err := os.Stat(path)
+    if err == nil { return nil }
+
+    if !os.IsNotExist(err) { return err }
+
+    fmt.Println(path)
+
+    err = os.Mkdir(path, fs.ModePerm)
+    if err != nil { return err }
+
+    return nil
+}
+
+func prepareEnv(env EnvSettings) error {
+    err := checkAndMkdir(env.uploadPath)
+    if err != nil { return err }
+
+    err = checkAndMkdir(env.downloadPath)
+    if err != nil { return err }
+
+    return nil
+}
+
 func main() {
     uploadPath = UPLOAD_PATH_KOBO
     if runtime.GOOS == "windows" {
@@ -192,7 +222,23 @@ func main() {
     webPath := path.Join(exePath, "web")
     fs := http.FileServer(http.Dir(webPath))
 
+    // for downloading files from device.
+    downloadPath := path.Join(exePath, "download")
+    dlFs := http.FileServer(http.Dir(downloadPath))
+
+    envSettings := EnvSettings {
+        uploadPath: uploadPath,
+        downloadPath: downloadPath,
+    }
+
+    err = prepareEnv(envSettings)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+
     http.Handle("/web/", http.StripPrefix("/web/", fs))
+    http.Handle("/download/", http.StripPrefix("/download/", dlFs))
     http.HandleFunc("/upload", uploadFile)
     http.HandleFunc("/", homePage)
 
