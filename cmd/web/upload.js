@@ -16,6 +16,18 @@ function disableUI(status)
   $uploadBtn.prop('disabled', status);
 }
 
+function newXHR()
+{
+  let xhr = new window.XMLHttpRequest();
+  xhr.upload.addEventListener('progress', function(evt) {
+    if (evt.lengthComputable) {
+      let percentComplete = Number.parseFloat((evt.loaded / evt.total) * 100).toPrecision(4);
+      $uploadResult.text(`(${percentComplete}%) ${PROCESSING}`);
+    }
+  }, false);
+  return xhr;
+}
+
 function uploadFile()
 {
   if ($inputName[0].files.length == 0) {
@@ -38,16 +50,7 @@ function uploadFile()
   formData.append('upload-converted', converted);
 
   $.ajax({
-    xhr: function() {
-        let xhr = new window.XMLHttpRequest();
-        xhr.upload.addEventListener('progress', function(evt) {
-            if (evt.lengthComputable) {
-                let percentComplete = Number.parseFloat((evt.loaded / evt.total) * 100).toPrecision(4);
-                $uploadResult.text(`(${percentComplete}%) ${PROCESSING}`);
-            }
-        }, false);
-        return xhr;
-    },
+    xhr: newXHR,
     url: '/upload',
     type: 'POST',
     timeout: 3600000,
