@@ -3,6 +3,8 @@ let $converted = $('#upload-converted');
 let $uploadBtn = $('#upload-btn');
 let $uploadResult = $('#upload-result');
 
+const PROCESSING = 'processing ...';
+
 function selectFile()
 {
   $uploadResult.text('');
@@ -21,7 +23,7 @@ function uploadFile()
     return;
   }
 
-  $uploadResult.text('processing...');
+  $uploadResult.text(PROCESSING);
   disableUI(true);
 
   let formData = new FormData();
@@ -36,6 +38,16 @@ function uploadFile()
   formData.append('upload-converted', converted);
 
   $.ajax({
+    xhr: function() {
+        let xhr = new window.XMLHttpRequest();
+        xhr.upload.addEventListener('progress', function(evt) {
+            if (evt.lengthComputable) {
+                let percentComplete = Number.parseFloat((evt.loaded / evt.total) * 100).toPrecision(4);
+                $uploadResult.text(`(${percentComplete}%) ${PROCESSING}`);
+            }
+        }, false);
+        return xhr;
+    },
     url: '/upload',
     type: 'POST',
     timeout: 3600000,
