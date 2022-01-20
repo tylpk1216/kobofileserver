@@ -3,6 +3,8 @@ package main
 import (
     "fmt"
     "os"
+    "os/exec"
+    "runtime"
     "strconv"
     "time"
 )
@@ -109,5 +111,19 @@ func importBooks() error {
         return fmt.Errorf("usb plug remove Error (%v) \n", err)
     }
 
+    return nil
+}
+
+// You must add ExcludeSyncFolders settings to prevent from appearing books twice.
+// /mmt/sd/kobofileserver and /mnt/onboard/kobofileserver
+// ExcludeSyncFolders=(\\.(?!kobo|adobe).+|([^.][^/]*/)+\\..+|kobofileserver)
+func notifyKoboRefresh(script string) error {
+    if runtime.GOOS != "windows" {
+        cmd := exec.Command("/bin/sh", script)
+        err := cmd.Run()
+        if err != nil {
+            return err
+        }
+    }
     return nil
 }

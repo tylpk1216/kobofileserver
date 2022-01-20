@@ -8,7 +8,6 @@ import (
     "io/fs"
     "net/http"
     "os"
-    "os/exec"
     "path"
     "path/filepath"
     "runtime"
@@ -77,20 +76,6 @@ func convertEPUB(converted bool, fileName string) (string, error) {
     return newFileName, nil
 }
 
-// You must add ExcludeSyncFolders settings to prevent from appearing books twice.
-// /mmt/sd/kobofileserver and /mnt/onboard/kobofileserver
-// ExcludeSyncFolders=(\\.(?!kobo|adobe).+|([^.][^/]*/)+\\..+|kobofileserver)
-func notifyKoboRefresh() error {
-    if runtime.GOOS != "windows" {
-        cmd := exec.Command("/bin/sh", refreshScript)
-        err := cmd.Run()
-        if err != nil {
-            return err
-        }
-    }
-    return nil
-}
-
 func saveFile(r *http.Request) (RequestData, error) {
     var data RequestData
 
@@ -152,17 +137,6 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
     }
 
     t3 := time.Now()
-
-    /*
-    // only for Elipsa now.
-    // click connect button automatically.
-    err = importBooks()
-    if err != nil {
-        s := responseString(fmt.Sprintf("Error: (%v), please use \"Import Books\" of NickelMenu", err))
-        fmt.Fprintf(w, s)
-        return
-    }
-    */
 
     s := responseString(
         fmt.Sprintf(
