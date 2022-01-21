@@ -46,6 +46,10 @@ td {
   width: 80%;
 }
 
+.filename {
+  word-break: break-all;
+}
+
 .tb {
   margin: 5 auto;
 }

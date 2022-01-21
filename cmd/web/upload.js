@@ -4,7 +4,7 @@ let $uploadBtn = $('#upload-btn');
 let $uploadResult = $('#upload-result');
 
 let $tbResult = $('#tb-result');
-let $tbFileName = $('#tb-filename');
+let $tbFileName = $('#filename');
 let $tbSavedTime = $('#tb-savedtime');
 let $tbConvertedTime = $('#tb-convertedtime');
 

@@ -26,7 +26,7 @@ var homeHTML string = `
         </tr>
         <tr>
           <td class="tb-item">File</td>
-          <td id="tb-filename" class="tb-width"></td>
+          <td id="tb-filename" class="tb-width"><div id="filename"></div></td>
         </tr>
         <tr>
           <td class="tb-item">Saved Time</td>
