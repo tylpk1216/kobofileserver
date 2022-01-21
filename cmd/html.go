@@ -17,6 +17,28 @@ var homeHTML string = `
   </p>
   <input type="button" value="Click to upload file" id="upload-btn" class="upload-btn" onClick="uploadFile()"/>
   <div id="upload-result" class="upload-result"></div>
+  <div>
+    <table border=1>
+      <tbody>
+        <tr>
+          <td>Result</td>
+          <td id="tb-result" class="tb-width"></td>
+        </tr>
+        <tr>
+          <td>File</td>
+          <td id="tb-filename" class="tb-width"></td>
+        </tr>
+        <tr>
+          <td>Saved Time</td>
+          <td id="tb-savedtime" class="tb-width"></td>
+        </tr>
+        <tr>
+          <td>Converted Time</td>
+          <td id="tb-convertedtime" class="tb-width"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </form>
 </body>
 <script src="./web/jquery.min.js"></script>

@@ -33,8 +33,22 @@ type EnvSettings struct {
     downloadPath string
 }
 
-func responseString(msg string) string {
-    return fmt.Sprintf("%s", msg)
+type UploadResult struct {
+    Result string
+    FileName string
+    SavedTime string
+    ConvertedTime string
+}
+
+func responseString(res UploadResult) string {
+    // prevent from having error, just use fmt.
+    return fmt.Sprintf(
+        `{"Result":"%s","FileName":"%s","SavedTime":"%s","ConvertedTime":"%s"}`,
+        res.Result,
+        res.FileName,
+        res.SavedTime,
+        res.ConvertedTime,
+    )
 }
 
 func convertEPUB(converted bool, fileName string) (string, error) {
@@ -118,11 +132,14 @@ func saveFile(r *http.Request) (RequestData, error) {
 }
 
 func uploadFile(w http.ResponseWriter, r *http.Request) {
+    var res UploadResult
+
     t1 := time.Now()
 
     requestData, err := saveFile(r)
     if err != nil {
-        s := responseString(fmt.Sprintf("Error: (%v)", err))
+        res.Result = fmt.Sprintf("Error: (%v)", err);
+        s := responseString(res)
         fmt.Fprintf(w, s)
         return
     }
@@ -131,21 +148,19 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 
     finalFile, err := convertEPUB(requestData.converted, requestData.fileName)
     if err != nil {
-        s := responseString(fmt.Sprintf("Error: (%v)", err))
+        res.Result = fmt.Sprintf("Error: (%v)", err);
+        s := responseString(res)
         fmt.Fprintf(w, s)
         return
     }
 
     t3 := time.Now()
 
-    s := responseString(
-        fmt.Sprintf(
-            "Uploading (%s) is successful, saveFile(%v), convertFile(%v)",
-            finalFile,
-            t2.Sub(t1),
-            t3.Sub(t2),
-        ),
-    )
+    res.FileName = finalFile
+    res.SavedTime = t2.Sub(t1).String()
+    res.ConvertedTime = t3.Sub(t2).String()
+
+    s := responseString(res)
     fmt.Fprintf(w, s)
 }
 

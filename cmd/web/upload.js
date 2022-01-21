@@ -3,11 +3,20 @@ let $converted = $('#upload-converted');
 let $uploadBtn = $('#upload-btn');
 let $uploadResult = $('#upload-result');
 
+let $tbResult = $('#tb-result');
+let $tbFileName = $('#tb-filename');
+let $tbSavedTime = $('#tb-savedtime');
+let $tbConvertedTime = $('#tb-convertedtime');
+
 const PROCESSING = 'processing ...';
 
 function selectFile()
 {
   $uploadResult.text('');
+  $tbResult.text('');
+  $tbFileName.text('');
+  $tbSavedTime.text('');
+  $tbConvertedTime.text('');
 }
 
 function disableUI(status)
@@ -26,6 +35,28 @@ function newXHR()
     }
   }, false);
   return xhr;
+}
+
+function generateResult(msg)
+{
+  $uploadResult.text('');
+
+  if (msg.indexOf('{') == -1) {
+    $tbResult.text(msg);
+    return
+  }
+
+  let json = JSON.parse(msg);
+
+  if (json.Result == '') {
+    $tbResult.text('OK');
+    $tbFileName.text(json.FileName);
+    $tbSavedTime.text(json.SavedTime);
+    $tbConvertedTime.text(json.ConvertedTime);
+    return;
+  }
+
+  $tbResult.text(json.Result);
 }
 
 function uploadFile()
@@ -59,11 +90,11 @@ function uploadFile()
     contentType: false,
     success: function(data, result) {
       disableUI(false);
-      $uploadResult.text(data);
+      generateResult(data);
     },
     error: function(xhr, textStatus, message) {
       disableUI(false);
-      $uploadResult.text(message);
+      generateResult(message);
     }
   });
 }

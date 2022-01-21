@@ -36,3 +36,7 @@ p {
   padding: 30px 10px;
   word-wrap:break-word;
 }
+
+.tb-width {
+  width: 80%;
+}
