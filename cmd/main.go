@@ -218,6 +218,9 @@ func main() {
 
     fmt.Printf("Listening on: 80, web path: (%s), uploading path: %s\n", webPath, uploadPath)
 
+    img := path.Join(exePath, "qrcode.jpeg")
+    generateQRCode(img)
+
     err = http.ListenAndServe(":80", nil)
     if err != nil {
         fmt.Println(err)
