@@ -12,6 +12,10 @@ p {
   margin: 0px 5px;
 }
 
+td {
+  display: table-cell;
+}
+
 .upload-file {
   width: 99%;
 }
@@ -38,6 +42,7 @@ p {
 }
 
 .tb-width {
+  table-layout:fixed;
   width: 80%;
 }
 
