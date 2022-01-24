@@ -5,18 +5,28 @@ export GOOS=linux
 export GOARCH=arm
 export GOARM=7
 
+
 # variables
 FOLDER=KoboFileServer
 APP=kobofileserver
 SCRIPT=kobofileserver.sh
 
 ZIP=/c/Program\ Files/7-Zip/7z.exe
-RELEASE=Release.zip
+RELEASE="Release_v${1}.zip"
+
 
 # clear old folder
 rm -f "$RELEASE"
 rm -rf "$FOLDER"
 mkdir "$FOLDER"
+
+
+# check variables
+if [ "$1" == "" ]; then
+    echo "Please give version (x.x.x)"
+    exit 1
+fi
+
 
 # build app
 cd ..
@@ -27,6 +37,7 @@ if [ "$?" != "0" ]; then
     exit 1
 fi
 
+
 # copy files
 cd scripts
 
@@ -34,7 +45,8 @@ cp ../"$APP" "$FOLDER"
 cp -r ../web "$FOLDER"
 
 cp "$SCRIPT" "$FOLDER"
-sed -i "s/\r//g" "$FOLDER"/"$SCRIPT"
+sed -i "s/\r//g" "${FOLDER}/${SCRIPT}"
+
 
 # create zip
 "$ZIP" a "$RELEASE" "$FOLDER"
