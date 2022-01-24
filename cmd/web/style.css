@@ -36,9 +36,9 @@ td {
 }
 
 .upload-result {
-  display:block;
+  display: inline-block;
   padding: 30px 10px;
-  word-wrap:break-word;
+  overflow-wrap: anywhere;
 }
 
 .tb-width {
@@ -47,7 +47,8 @@ td {
 }
 
 .filename {
-  word-break: break-all;
+  display: inline-block;
+  overflow-wrap: anywhere;
 }
 
 .tb {
