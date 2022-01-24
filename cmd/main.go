@@ -206,6 +206,9 @@ func main() {
 
     exePath = filepath.Dir(exePath)
 
+    img := path.Join(exePath, "qrcode.png")
+    generateQRCode(img)
+
     refreshScript = path.Join(exePath, "refresh.sh")
 
     webPath := path.Join(exePath, "web")
@@ -232,9 +235,6 @@ func main() {
     http.HandleFunc("/", homePage)
 
     fmt.Printf("Listening on: 80, web path: (%s), uploading path: %s\n", webPath, uploadPath)
-
-    img := path.Join(exePath, "qrcode.png")
-    generateQRCode(img)
 
     err = http.ListenAndServe(":80", nil)
     if err != nil {
