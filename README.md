@@ -2,7 +2,7 @@
 Run it on Kobo device, then use browser to transfer file to device.
 
 # Installation
-1. Install NickelMenu, I use it to launch the application.
+1. Install [NickelMenu](https://github.com/pgaskin/NickelMenu), I use it to launch the application.
 2. Insert the device into your PC over USB.
 3. Put KoboFileServer folder in ".adds" folder of device.
 4. Create "kobofileserver" folder on device.
@@ -19,6 +19,17 @@ menu_item :main    :KoboFileServer (toggle)  :cmd_output         :500:quiet  :/u
   chain_success                              :dbg_toast          :Stopped KoboFileServer
 ```
 6. Adjust your sleep settings of device for transfering large file. The processing speed is 0.52MB/second on Kobo Elipsa when I use HyRead Gaze Pocket to uploading file. If you use your cell phone, I think the speed is better.
+
+\
+From v0.3.0, if you have installed [FBInk](https://www.mobileread.com/forums/showthread.php?t=299110), you can use kobofileserver.sh to run the app. When the app starts, it will show a qrcode of your device ip on the device screen.
+```
+menu_item :main    :KoboFileServer (toggle)  :cmd_output         :500:quiet  :/usr/bin/pkill -f "^/mnt/onboard/.adds/KoboFileServer/kobofileserver"
+  chain_success:skip:3
+  chain_failure                              :cmd_spawn          :quiet :exec /mnt/onboard/.adds/KoboFileServer/kobofileserver.sh
+  chain_failure                              :dbg_toast          :Error starting KoboFileServer
+  chain_always:skip:-1
+  chain_success                              :dbg_toast          :Stopped KoboFileServer
+```
 
 # How to use it
 1. Click on the "Force Wi-Fi On (toggle)" of NickelMenu.
