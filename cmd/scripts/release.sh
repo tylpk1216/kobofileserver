@@ -11,7 +11,7 @@ FOLDER=KoboFileServer
 APP=kobofileserver
 SCRIPT=kobofileserver.sh
 
-ZIP=/c/Program\ Files/7-Zip/7z.exe
+ZIP="/c/Program Files/7-Zip/7z.exe"
 RELEASE="Release_v${1}.zip"
 
 
