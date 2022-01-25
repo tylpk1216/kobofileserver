@@ -44,7 +44,8 @@ menu_item :main    :KoboFileServer (toggle)  :cmd_output         :500:quiet  :/u
 8. After uploading file is done, click on the "Import Books" of NickelMenu to import your uploading file.
 
 # Test Video
-[Use Android E-Ink device(HyRead Gaze Pocket) to upload files to Kobo Elipsa.](https://youtu.be/mZ4C3v0sqL0 "kobofileserver")
+[Use Android E-Ink device(HyRead Gaze Pocket) to upload files to Kobo Elipsa.](https://youtu.be/mZ4C3v0sqL0 "kobofileserver")\
+[Use Android phone to upload file to Kobo Elipsa.](https://youtu.be/nsvzy7Spkcc "kobofileserver")
 
 # License
 MIT
