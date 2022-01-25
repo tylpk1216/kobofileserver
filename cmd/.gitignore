@@ -6,4 +6,6 @@ test
 
 main.exe
 kobofileserver
-scripts/Release.zip
+scripts/Release*.zip
+scripts/test.sh
+scripts/qrcode*
