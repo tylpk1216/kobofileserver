@@ -36,9 +36,9 @@ td {
 }
 
 .upload-result {
-  display: inline-block;
-  padding: 30px 10px;
-  overflow-wrap: anywhere;
+  display: block;
+  padding: 15px 10px;
+  word-wrap: break-word;
 }
 
 .tb-width {
@@ -52,7 +52,7 @@ td {
 }
 
 .tb {
-  margin: 5 auto;
+  margin: 20px 10px;
 }
 
 .tb-item {
