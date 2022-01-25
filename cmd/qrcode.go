@@ -34,27 +34,27 @@ func getIP() (string, error) {
     return "", fmt.Errorf("Not found")
 }
 
-func generateQRCode(img string) error {
+func generateQRCode(img string) (string, error) {
     ip, err := getIP()
     if err != nil {
-        return err
+        return "", err
     }
 
     url := fmt.Sprintf("http://%s", ip)
 
     qrc, err := qrcode.New(url)
     if err != nil {
-        return fmt.Errorf("could not generate QRCode: %v", err)
+        return url, fmt.Errorf("could not generate QRCode: %v", err)
     }
 
     w, err := standard.New(img)
     if err != nil {
-        return fmt.Errorf("standard.New failed: %v", err)
+        return url, fmt.Errorf("standard.New failed: %v", err)
     }
 
     if err = qrc.Save(w); err != nil {
-        return fmt.Errorf("could not save image: %v", err)
+        return url, fmt.Errorf("could not save image: %v", err)
     }
 
-    return nil
+    return url, nil
 }
