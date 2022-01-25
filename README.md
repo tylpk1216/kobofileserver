@@ -30,6 +30,8 @@ menu_item :main    :KoboFileServer (toggle)  :cmd_output         :500:quiet  :/u
   chain_always:skip:-1
   chain_success                              :dbg_toast          :Stopped KoboFileServer
 ```
+![QRCode](img/qrcode.png "QRCode")
+
 
 # How to use it
 1. Click on the "Force Wi-Fi On (toggle)" of NickelMenu.
