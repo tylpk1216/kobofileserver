@@ -48,15 +48,10 @@ function generateResult(msg)
 
   let json = JSON.parse(msg);
 
-  if (json.Result == '') {
-    $tbResult.text('OK');
-    $tbFileName.text(json.FileName);
-    $tbSavedTime.text(json.SavedTime);
-    $tbConvertedTime.text(json.ConvertedTime);
-    return;
-  }
-
   $tbResult.text(json.Result);
+  $tbFileName.text(json.FileName);
+  $tbSavedTime.text(json.SavedTime);
+  $tbConvertedTime.text(json.ConvertedTime);
 }
 
 function uploadFile()

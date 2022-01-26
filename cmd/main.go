@@ -156,6 +156,7 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 
     t3 := time.Now()
 
+    res.Result = "OK"
     res.FileName = finalFile
     res.SavedTime = t2.Sub(t1).String()
     res.ConvertedTime = t3.Sub(t2).String()
