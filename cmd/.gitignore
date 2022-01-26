@@ -8,4 +8,4 @@ main.exe
 kobofileserver
 scripts/Release*.zip
 scripts/test.sh
-scripts/qrcode*
+qrcode*
