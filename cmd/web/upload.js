@@ -66,8 +66,10 @@ function uploadFile()
 
   let formData = new FormData();
 
-  let fileName = $inputName[0].files[0];
-  formData.append('upload-file', fileName);
+  for (let i = 0; i < $inputName[0].files.length; i++) {
+    let fileName = $inputName[0].files[i];
+    formData.append('upload-file', fileName);
+  }
 
   let converted = '0';
   if ($converted.prop('checked')) {

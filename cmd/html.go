@@ -9,7 +9,7 @@ var homeHTML string = `
 </head>
 <body>
 <form enctype="multipart/form-data" action="/upload" method="post">
-  <input type="file" id="upload-file" class="upload-file" onClick="selectFile()"/>
+  <input type="file" multiple="multiple" id="upload-file" class="upload-file" onClick="selectFile()"/>
   </br>
   <p>
     <input type="checkbox" id="upload-converted" class="upload-converted" checked="checked" />

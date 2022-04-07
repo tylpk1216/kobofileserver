@@ -6,6 +6,7 @@ import (
     "fmt"
     "io"
     "io/fs"
+    "mime/multipart"
     "net/http"
     "os"
     "path"
@@ -25,7 +26,7 @@ var refreshScript string
 
 type RequestData struct {
     converted bool
-    fileName string
+    files []string
 }
 
 type EnvSettings struct {
@@ -90,6 +91,26 @@ func convertEPUB(converted bool, fileName string) (string, error) {
     return newFileName, nil
 }
 
+func saveOneFile(h *multipart.FileHeader) (string, error) {
+    file, err := h.Open()
+    if err != nil {
+        return "", err
+    }
+
+    defer file.Close()
+
+    fileName := path.Join(uploadPath, h.Filename)
+    f, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE, 0666)
+    if err != nil {
+        return "", err
+    }
+
+    io.Copy(f, file)
+    f.Close()
+
+    return fileName, nil
+}
+
 func saveFile(r *http.Request) (RequestData, error) {
     var data RequestData
 
@@ -108,25 +129,19 @@ func saveFile(r *http.Request) (RequestData, error) {
         converted = true
     }
 
-    file, handler, err := r.FormFile("upload-file")
-    if err != nil {
-        return data, err
-    }
-    defer file.Close()
-
-    fmt.Printf("uploadFile (%s) (%s) \n", handler.Filename, convertedStr)
-
-    fileName := path.Join(uploadPath, handler.Filename)
-    f, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE, 0666)
-    if err != nil {
-        return data, err
-    }
-
-    io.Copy(f, file)
-    f.Close()
-
     data.converted = converted
-    data.fileName = fileName
+
+    fileHeaders := r.MultipartForm.File["upload-file"]
+    for i := 0; i < len(fileHeaders); i++ {
+        header := fileHeaders[i]
+        s, err := saveOneFile(header)
+        if err != nil {
+            return data, err
+        }
+
+        fmt.Printf("uploadFile (%s) (%s) \n", header.Filename, convertedStr)
+        data.files = append(data.files, s)
+    }
 
     return data, nil
 }
@@ -146,18 +161,29 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 
     t2 := time.Now()
 
-    finalFile, err := convertEPUB(requestData.converted, requestData.fileName)
-    if err != nil {
-        res.Result = fmt.Sprintf("Error: (%v)", err);
-        s := responseString(res)
-        fmt.Fprintf(w, s)
-        return
+    fileNames := ""
+
+    for i := 0; i < len(requestData.files); i++ {
+        file := requestData.files[i]
+        finalFile, err := convertEPUB(requestData.converted, file)
+        if err != nil {
+            res.Result = fmt.Sprintf("Error: (%v)", err);
+            s := responseString(res)
+            fmt.Fprintf(w, s)
+            return
+        }
+
+        if i != 0 {
+            fileNames += ", "
+        }
+
+        fileNames += finalFile;
     }
 
     t3 := time.Now()
 
     res.Result = "OK"
-    res.FileName = finalFile
+    res.FileName = fileNames
     res.SavedTime = t2.Sub(t1).String()
     res.ConvertedTime = t3.Sub(t2).String()
 
