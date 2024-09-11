@@ -16,6 +16,8 @@ var homeHTML string = `
     <label class="converted-level">Convert EPUB to KEPUB</label>
   </p>
   <input type="button" value="Click to upload file" id="upload-btn" class="upload-btn" onClick="uploadFile()"/>
+  </br>
+  <input type="button" value="Change CSS for different screen" id="css-btn" class="upload-btn" onClick="toggleCSS()"/>
   <div id="upload-result" class="upload-result"></div>
   <div class="tb">
     <table border=1>

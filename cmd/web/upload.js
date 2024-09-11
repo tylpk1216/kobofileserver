@@ -10,6 +10,11 @@ let $tbConvertedTime = $('#tb-convertedtime');
 
 const PROCESSING = 'processing ...';
 
+const ORIGINAL_CSS = 0;
+const SMALL_CSS = 1;
+
+let cssFlag = ORIGINAL_CSS;
+
 function selectFile()
 {
   $uploadResult.text('');
@@ -52,6 +57,42 @@ function generateResult(msg)
   $tbFileName.text(json.FileName);
   $tbSavedTime.text(json.SavedTime);
   $tbConvertedTime.text(json.ConvertedTime);
+}
+
+function loadCSSFile(fileName){
+  var fileRef = document.createElement('link')
+  fileRef.setAttribute('rel', 'stylesheet')
+  fileRef.setAttribute('type', 'text/css')
+  fileRef.setAttribute('href', fileName)
+  document.getElementsByTagName('head')[0].appendChild(fileRef);
+}
+
+function removeCSSFile(fileName){
+  var allItems = document.getElementsByTagName('link');
+  for (var i = 0; i < allItems.length; i++) {
+    var item = allItems[i];
+    if (!item) continue;
+	var attribute = item.getAttribute('href');
+    if (!attribute) continue;
+	if (attribute.indexOf(fileName) == -1) continue;
+    
+	item.parentNode.removeChild(allItems[i]);
+  }
+}
+
+function toggleCSS()
+{
+  if (cssFlag == SMALL_CSS) {
+  	removeCSSFile('web/style_small.css');
+    loadCSSFile('web/style_ori.css');
+    cssFlag = ORIGINAL_CSS;
+  } else {
+  	removeCSSFile('web/style_ori.css');
+    loadCSSFile('web/style_small.css');
+    cssFlag = SMALL_CSS;
+  }
+
+  return;
 }
 
 function uploadFile()
