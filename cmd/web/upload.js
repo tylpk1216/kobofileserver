@@ -13,7 +13,7 @@ const PROCESSING = 'processing ...';
 const ORIGINAL_CSS = 0;
 const SMALL_CSS = 1;
 
-let cssFlag = ORIGINAL_CSS;
+let curCSSFlag = ORIGINAL_CSS;
 
 function selectFile()
 {
@@ -82,17 +82,15 @@ function removeCSSFile(fileName){
 
 function toggleCSS()
 {
-  if (cssFlag == SMALL_CSS) {
+  if (curCSSFlag == SMALL_CSS) {
   	removeCSSFile('web/style_small.css');
     loadCSSFile('web/style_ori.css');
-    cssFlag = ORIGINAL_CSS;
+    curCSSFlag = ORIGINAL_CSS;
   } else {
   	removeCSSFile('web/style_ori.css');
     loadCSSFile('web/style_small.css');
-    cssFlag = SMALL_CSS;
+    curCSSFlag = SMALL_CSS;
   }
-
-  return;
 }
 
 function uploadFile()
