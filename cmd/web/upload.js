@@ -72,22 +72,22 @@ function removeCSSFile(fileName){
   for (var i = 0; i < allItems.length; i++) {
     var item = allItems[i];
     if (!item) continue;
-	var attribute = item.getAttribute('href');
+    var attribute = item.getAttribute('href');
     if (!attribute) continue;
-	if (attribute.indexOf(fileName) == -1) continue;
+    if (attribute.indexOf(fileName) == -1) continue;
     
-	item.parentNode.removeChild(allItems[i]);
+    item.parentNode.removeChild(allItems[i]);
   }
 }
 
 function toggleCSS()
 {
   if (curCSSFlag == SMALL_CSS) {
-  	removeCSSFile('web/style_small.css');
+    removeCSSFile('web/style_small.css');
     loadCSSFile('web/style_ori.css');
     curCSSFlag = ORIGINAL_CSS;
   } else {
-  	removeCSSFile('web/style_ori.css');
+    removeCSSFile('web/style_ori.css');
     loadCSSFile('web/style_small.css');
     curCSSFlag = SMALL_CSS;
   }
